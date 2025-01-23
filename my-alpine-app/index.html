@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo App with Alpine.js</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body>
+  <div x-data="todoApp()">
+    <h1>Todo List</h1>
+    <input x-model="newTodo" type="text" placeholder="Add a todo" @keydown.enter="addTodo">
+    <button @click="addTodo">Add</button>
+    <ul>
+      <template x-for="(todo, index) in todos" :key="index">
+        <li :style="{ textDecoration: todo.completed ? 'line-through' : 'none', color: todo.completed ? 'green' : 'black' }">
+          <span x-text="todo.text"></span>
+          <button @click="toggleTodo(index)">Completed</button>
+          <button @click="removeTodo(index)">Remove</button>
+        </li>
+      </template>
+    </ul>
+  </div>
+
+  <script>
+    function todoApp() {
+      return {
+        newTodo: '',
+        todos: [],
+        addTodo() {
+          if (this.newTodo.trim()) {
+            this.todos.push({ text: this.newTodo, completed: false });
+            this.newTodo = '';
+          }
+        },
+        toggleTodo(index) {
+          this.todos[index].completed = !this.todos[index].completed;
+        },
+        removeTodo(index) {
+          this.todos.splice(index, 1);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
